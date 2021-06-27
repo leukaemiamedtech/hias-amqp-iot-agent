@@ -1,8 +1,9 @@
-#!/usr/bin/env python
-""" HIASCDI Global Helper Module.
+#!/usr/bin/env python3
+""" HIAS AMQP IoT Agent Global Helper Module.
 
-The HIASCDI Global Helper Module provides global helper
-functions to the HIASCDI application.
+The HIAS AMQP IoT Agent Global Helper Module provides
+global helper functions to the HIAS AMQP IoT Agent
+application.
 
 MIT License
 
@@ -43,10 +44,11 @@ from datetime import datetime
 
 
 class helpers():
-	""" HIASCDI Global Helper Module.
+	""" HIAS AMQP IoT Agent Global Helper Module.
 
-	The HIASCDI Global Helper Module provides global helper
-	functions to the HIASCDI application.
+	The HIAS AMQP IoT Agent Global Helper Module
+	provides global helper functions to the HIAS
+	AMQP IoT Agent application.
 	"""
 
 	def __init__(self, ltype, log=True):
