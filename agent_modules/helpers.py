@@ -1,8 +1,9 @@
-#!/usr/bin/env python
-""" HIASCDI Global Helper Module.
+#!/usr/bin/env python3
+""" HIAS AMQP IoT Agent Global Helper Module.
 
-The HIASCDI Global Helper Module provides global helper
-functions to the HIASCDI application.
+The HIAS AMQP IoT Agent Global Helper Module provides
+global helper functions to the HIAS AMQP IoT Agent
+application.
 
 MIT License
 
@@ -43,10 +44,11 @@ from datetime import datetime
 
 
 class helpers():
-	""" HIASCDI Global Helper Module.
+	""" HIAS AMQP IoT Agent Global Helper Module.
 
-	The HIASCDI Global Helper Module provides global helper
-	functions to the HIASCDI application.
+	The HIAS AMQP IoT Agent Global Helper Module
+	provides global helper functions to the HIAS
+	AMQP IoT Agent application.
 	"""
 
 	def __init__(self, ltype, log=True):
@@ -102,3 +104,9 @@ class helpers():
 
 		with open(os.path.dirname(os.path.abspath(__file__)) + '/../../../../configuration/config.json') as confs:
 			self.confs_core = json.loads(confs.read())
+
+		with open(os.path.dirname(os.path.abspath(__file__)) + '/../../../hiashdi/configuration/config.json') as confs:
+			self.confs_hiashdi = json.loads(confs.read())
+
+		with open(os.path.dirname(os.path.abspath(__file__)) + '/../../../hiashdi/configuration/credentials.json') as confs:
+			self.credentials_hiashdi = json.loads(confs.read())

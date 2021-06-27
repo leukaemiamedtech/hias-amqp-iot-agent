@@ -1,9 +1,10 @@
 # Asociación de Investigacion en Inteligencia Artificial Para la Leucemia Peter Moss
 ## HIAS AMQP IoT Agent
 
-![HIAS AMQP IoT AgentHIAS AMQP IoT Agent](assets/images/hias-amqp-iot-agent.jpg)
+![HIAS AMQP IoT AgentHIAS AMQP IoT Agent](assets/images/project-banner.jpg)
 
-[![CURRENT RELEASE](https://img.shields.io/badge/CURRENT%20RELEASE-1.0.0-blue.svg)](https://github.com/AIIAL/HIAS-AMQP-IoT-Agent/tree/1.0.0) [![UPCOMING RELEASE](https://img.shields.io/badge/CURRENT%20DEV%20BRANCH-2.0.0-blue.svg)](https://github.com/AIIAL/HIAS-AMQP-IoT-Agent/tree/2.0.0) [![Contributions Welcome!](https://img.shields.io/badge/Contributions-Welcome-lightgrey.svg)](CONTRIBUTING.md)  [![Issues](https://img.shields.io/badge/Issues-Welcome-lightgrey.svg)](issues) [![LICENSE](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](LICENSE)
+[![CURRENT RELEASE](https://img.shields.io/badge/CURRENT%20RELEASE-1.1.0-blue.svg)](https://github.com/AIIAL/HIAS-AMQP-IoT-Agent/tree/1.1.0) [![UPCOMING RELEASE](https://img.shields.io/badge/CURRENT%20DEV%20BRANCH-2.0.0-blue.svg)](https://github.com/AIIAL/HIAS-AMQP-IoT-Agent/tree/2.0.0) [![Contributions Welcome!](https://img.shields.io/badge/Contributions-Welcome-lightgrey.svg)](CONTRIBUTING.md)  [![Issues](https://img.shields.io/badge/Issues-Welcome-lightgrey.svg)](issues) [![LICENSE](https://img.shields.io/badge/LICENSE-MIT-blue.svg)](LICENSE)  [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/) [![Documentation Status](https://readthedocs.org/projects/hias-amqp-iot-agent/badge/?version=latest)](https://hias-amqp-iot-agent.readthedocs.io/en/latest/?badge=latest) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4998/badge)](https://bestpractices.coreinfrastructure.org/projects/4998)
+
 
 &nbsp;
 
@@ -36,7 +37,7 @@ The **HIAS AMQP IoT Agent** is a bridge between HIAS devices that support the AM
 
 # GETTING STARTED
 
-To get started follow the [Getting Started](documentation/getting-started.md) guide.
+To get started follow the [Getting Started](docs/getting-started.md) guide.
 
 &nbsp;
 
