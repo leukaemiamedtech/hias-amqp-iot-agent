@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """ HIAS iotJumpWay Agent Abstract Class
 
 HIAS IoT Agents process all data coming from entities connected to the HIAS
@@ -67,6 +67,30 @@ class Agent(AbstractAgent):
 	def __init__(self, protocol):
 		super().__init__(protocol)
 
+	def amqpConsumeSet(self):
+		""" Sets up the AMQP queue subscriptions. """
+
+		self.channel.basic_consume('Life', self.lifeCallback,
+							auto_ack=True)
+		self.channel.basic_consume('Statuses', self.statusCallback,
+							auto_ack=True)
+		self.channel.basic_consume('Sensors', self.sensorsCallback,
+							auto_ack=True)
+		self.helpers.logger.info("AMQP consume setup!")
+
+	def amqpConsumeStart(self):
+		""" Starts consuming. """
+
+		self.helpers.logger.info("AMQP consume starting!")
+		self.channel.start_consuming()
+
+	def amqpPublish(self, data, routing_key):
+		""" Publishes to an AMQP broker queue. """
+
+		self.channel.basic_publish(
+			exchange=self.helpers.confs_core["iotJumpWay"]["amqp"]["exchange"], routing_key=routing_key, body=data)
+		self.helpers.logger.info("AMQP publish complete!")
+
 	def statusCallback(self, ch, method, properties, body):
 		""" Processes status messages. """
 		Thread(target=self.statusesWorker, args=(body,), daemon=True).start()
@@ -106,7 +130,8 @@ class Agent(AbstractAgent):
 			})
 
 		if updateResponse:
-			_id = self.mongodb.insertData(self.mongodb.mongoConn.Statuses, {
+
+			_id = self.hiashdi.insertData("Statuses", {
 				"Use": entityType,
 				"Location": location,
 				"Zone": zone,
@@ -117,10 +142,17 @@ class Agent(AbstractAgent):
 				"Staff": entity if entityType == "Staff" else "NA",
 				"Status": status,
 				"Time": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-			}, None)
+			})
 
-			self.helpers.logger.info(
-				entityType + " " + entity + " status update OK")
+			if _id != False:
+
+				self.helpers.logger.info(
+					entityType + " " + entity + " status update OK")
+
+			else:
+				self.helpers.logger.error(
+				entityType + " " + entity + " status update KO")
+
 		else:
 			self.helpers.logger.error(
 				entityType + " " + entity + " status update KO")
@@ -182,7 +214,8 @@ class Agent(AbstractAgent):
 			})
 
 		if updateResponse:
-			_id = self.mongodb.insertData(self.mongodb.mongoConn.Life, {
+
+			_id = self.hiashdi.insertData("Life", {
 				"Use": entityType,
 				"Location": location,
 				"Zone": zone,
@@ -193,10 +226,18 @@ class Agent(AbstractAgent):
 				"Staff": entity if entityType == "Staff" else "NA",
 				"Data": data,
 				"Time": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-			}, None)
+			})
 
-			self.helpers.logger.info(
-				entityType + " " + entity + " life update OK")
+			if _id != False:
+
+				self.helpers.logger.info(
+					entityType + " " + entity + " life update OK")
+
+			else:
+
+				self.helpers.logger.info(
+					entityType + " " + entity + " life update KO")
+
 		else:
 			self.helpers.logger.error(
 				entityType + " " + entity + " life update KO")
@@ -254,7 +295,8 @@ class Agent(AbstractAgent):
 			})
 
 		if updateResponse:
-			_id = self.mongodb.insertData(self.mongodb.mongoConn.Sensors, {
+
+			_id = self.hiashdi.insertData("Sensors", {
 				"Use": entityType,
 				"Location": location,
 				"Zone": zone,
@@ -269,38 +311,21 @@ class Agent(AbstractAgent):
 				"Value": data["Value"],
 				"Message": data["Message"],
 				"Time": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-			}, None)
+			})
 
-			self.helpers.logger.info(
-				entityType + " " + entity + " sensors update OK")
+			if _id != False:
+
+				self.helpers.logger.info(
+					entityType + " " + entity + " sensors update OK")
+
+			else:
+
+				self.helpers.logger.info(
+					entityType + " " + entity + " sensors update KO")
+
 		else:
 			self.helpers.logger.error(
 				entityType + " " + entity + " sensors update KO")
-
-	def amqpConsumeSet(self):
-		""" Sets up the AMQP queue subscriptions. """
-
-		self.channel.basic_consume('Life', self.lifeCallback,
-							auto_ack=True)
-		self.channel.basic_consume('Statuses', self.statusCallback,
-							auto_ack=True)
-		self.channel.basic_consume('Sensors', self.sensorsCallback,
-							auto_ack=True)
-		self.helpers.logger.info("AMQP consume setup!")
-
-	def amqpConsumeStart(self):
-		""" Starts consuming. """
-
-		self.helpers.logger.info("AMQP consume starting!")
-		self.channel.start_consuming()
-
-	def amqpPublish(self, data, routing_key):
-		""" Publishes to an AMQP broker queue. """
-
-		self.channel.basic_publish(
-			exchange=self.helpers.confs_core["iotJumpWay"]["amqp"]["exchange"], routing_key=routing_key, body=data)
-		self.helpers.logger.info("AMQP publish complete!")
-		threading.Timer(300.0, self.life).start()
 
 	def life(self):
 		""" Sends entity statistics to HIAS """
@@ -321,11 +346,12 @@ class Agent(AbstractAgent):
 			"Memory": str(mem),
 			"Diskspace": str(hdd),
 			"Temperature": str(tmp),
-			"Latitude": float(location[0]),
-			"Longitude": float(location[1])
+			"Latitude": str(location[0]),
+			"Longitude": str(location[1])
 		}), "Life")
 
 		self.helpers.logger.info("Agent life statistics published.")
+		threading.Timer(300.0, self.life).start()
 
 	def respond(self, responseCode, response):
 		""" Returns the request repsonse """
@@ -368,7 +394,7 @@ def main():
 	signal.signal(signal.SIGINT, Agent.signal_handler)
 	signal.signal(signal.SIGTERM, Agent.signal_handler)
 
-	Agent.mongodbConn()
+	Agent.hiashdiConn()
 	Agent.hiascdiConn()
 	Agent.hiasbchConn()
 	Agent.amqpConn({
